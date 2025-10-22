@@ -9,7 +9,7 @@ namespace Modelos
     public class ActividadesClientes
     {
         public int id { get; set; }
-        public Actividades plan { get; set; }
+        public Actividades actividad { get; set; }
         public Clientes cliente { get; set; }
         public DateTime fechaInicio { get; set; }
         public int vigente { get; set; } // 1-Vigente | 2-Caducado

@@ -49,7 +49,6 @@
     <Compile Include="PagosClientes.cs" />
     <Compile Include="Periodos.cs" />
     <Compile Include="Actividades.cs" />
-    <Compile Include="MovimientosAsientos.cs" />
     <Compile Include="Clientes.cs" />
     <Compile Include="Planes.cs" />
     <Compile Include="TipoActividades.cs" />
