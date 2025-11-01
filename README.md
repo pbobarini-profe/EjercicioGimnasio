@@ -25,6 +25,7 @@ CREATE TABLE dbo.Clientes (
     fechaNacimiento DATETIME2(0) NOT NULL
 );
 
+
 CREATE TABLE dbo.Entrenadores (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     dni VARCHAR(20) NOT NULL,
@@ -35,21 +36,25 @@ CREATE TABLE dbo.Entrenadores (
     fechaNacimiento DATETIME2(0) NOT NULL
 );
 
+
 CREATE TABLE dbo.TipoActividades (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     descripcion INT NOT NULL -- según modelo
 );
+
 
 CREATE TABLE dbo.Periodos (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     descripcion INT NOT NULL -- yyyyMM
 );
 
+
 CREATE TABLE dbo.Ejercicios (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     descripcion VARCHAR(MAX) NULL
 );
+
 
 CREATE TABLE dbo.Especializaciones (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -68,6 +73,7 @@ CREATE TABLE dbo.Actividades (
         FOREIGN KEY (tipoActividadId) REFERENCES dbo.TipoActividades(id)
 );
 
+
 CREATE TABLE dbo.Planes (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     clienteId INT NOT NULL,
@@ -81,6 +87,7 @@ CREATE TABLE dbo.Planes (
         FOREIGN KEY (entrenadorId) REFERENCES dbo.Entrenadores(id)
 );
 
+
 CREATE TABLE dbo.DetallePlanes (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     planId INT NOT NULL,
@@ -90,6 +97,7 @@ CREATE TABLE dbo.DetallePlanes (
     CONSTRAINT FK_DetallePlanes_Ejercicios
         FOREIGN KEY (ejercicioId) REFERENCES dbo.Ejercicios(id)
 );
+
 
 CREATE TABLE dbo.ActividadesClientes (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -103,6 +111,7 @@ CREATE TABLE dbo.ActividadesClientes (
         FOREIGN KEY (clienteId) REFERENCES dbo.Clientes(id)
 );
 
+
 CREATE TABLE dbo.ActividadesEntrenadores (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     actividadId INT NOT NULL,
@@ -114,6 +123,7 @@ CREATE TABLE dbo.ActividadesEntrenadores (
     CONSTRAINT FK_ActEnt_Entrenadores
         FOREIGN KEY (entrenadorId) REFERENCES dbo.Entrenadores(id)
 );
+
 
 -- Nota: en el modelo la propiedad se llama "entrengador" (con 'g'). Se respeta en el nombre de columna.
 
