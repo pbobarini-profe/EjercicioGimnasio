@@ -12,149 +12,133 @@ Siempre que esten desarrollando asegurense tener su rama seleccionada. Cualquier
 
 //Tablas
 
--- Base
+-- Tablas base
+
 
 CREATE TABLE dbo.Clientes (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    nombreCompleto NVARCHAR(200) NULL,
-    identificacionTributaria NVARCHAR(50) NULL
+    dni VARCHAR(20) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    telefono VARCHAR(30) NOT NULL,
+    genero INT NOT NULL, -- 1-hombre | 2-mujer
+    fechaNacimiento DATETIME2(0) NOT NULL
 );
-GO
 
-
-CREATE TABLE dbo.TipoComprobante (
+CREATE TABLE dbo.Entrenadores (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    descripcion NVARCHAR(200) NULL
+    dni VARCHAR(20) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    telefono VARCHAR(30) NOT NULL,
+    genero INT NOT NULL, -- 1-hombre | 2-mujer
+    fechaNacimiento DATETIME2(0) NOT NULL
 );
-GO
 
-
-CREATE TABLE dbo.Usuarios (
+CREATE TABLE dbo.TipoActividades (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    nombre NVARCHAR(100) NULL,
-    apellido NVARCHAR(100) NULL,
-    nombreUsuario NVARCHAR(100) NULL,
-    contrasena NVARCHAR(200) NULL,
-    mail NVARCHAR(254) NULL,
-    fechaAlta DATETIME2(0) NOT NULL
+    descripcion INT NOT NULL -- según modelo
 );
-GO
 
-
-CREATE TABLE dbo.Proveedores (
+CREATE TABLE dbo.Periodos (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    nombreCompleto NVARCHAR(200) NULL,
-    identificacionTributaria NVARCHAR(50) NULL
+    descripcion INT NOT NULL -- yyyyMM
 );
-GO
 
-CREATE TABLE dbo.Productos (
+CREATE TABLE dbo.Ejercicios (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    descripcion NVARCHAR(200) NULL
+    nombre VARCHAR(100) NOT NULL,
+    descripcion VARCHAR(MAX) NULL
 );
-GO
 
-CREATE TABLE dbo.Insumos (
+CREATE TABLE dbo.Especializaciones (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    descripcion NVARCHAR(200) NULL
+    descripcion VARCHAR(200) NOT NULL
 );
-GO
 
--- Movimientos principales
+-- Dependientes
 
 
-CREATE TABLE dbo.Compras (
+CREATE TABLE dbo.Actividades (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    fecha DATETIME2(0) NOT NULL,
-    proveedorId INT NOT NULL,
-    tipoComprobanteId INT NOT NULL,
-    puntoVenta NVARCHAR(10) NULL,
-    numero NVARCHAR(20) NULL,
-    netoTotal DECIMAL(18,2) NOT NULL,
-    ivaTotal DECIMAL(18,2) NOT NULL,
-    noGravado DECIMAL(18,2) NOT NULL,
-    otrosTributos DECIMAL(18,2) NOT NULL,
-    usuarioId INT NOT NULL,
-    CONSTRAINT FK_Compras_Proveedores FOREIGN KEY (proveedorId) REFERENCES dbo.Proveedores(id),
-    CONSTRAINT FK_Compras_TipoComprobante FOREIGN KEY (tipoComprobanteId) REFERENCES dbo.TipoComprobante(id),
-    CONSTRAINT FK_Compras_Usuarios FOREIGN KEY (usuarioId) REFERENCES dbo.Usuarios(id)
+    descripcion VARCHAR(200) NOT NULL,
+    tipoActividadId INT NOT NULL,
+    monto DECIMAL(18,2) NOT NULL,
+    CONSTRAINT FK_Actividades_TipoActividades
+        FOREIGN KEY (tipoActividadId) REFERENCES dbo.TipoActividades(id)
 );
-GO
 
-CREATE TABLE dbo.Ventas (
+CREATE TABLE dbo.Planes (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    fecha DATETIME2(0) NOT NULL,
     clienteId INT NOT NULL,
-    tipoComprobanteId INT NOT NULL,
-    puntoVenta NVARCHAR(10) NULL,
-    numero NVARCHAR(20) NULL,
-    netoTotal DECIMAL(18,2) NOT NULL,
-    ivaTotal DECIMAL(18,2) NOT NULL,
-    noGravado DECIMAL(18,2) NOT NULL,
-    otrosTributos DECIMAL(18,2) NOT NULL,
-    usuarioId INT NOT NULL,
-    CONSTRAINT FK_Ventas_Clientes FOREIGN KEY (clienteId) REFERENCES dbo.Clientes(id),
-    CONSTRAINT FK_Ventas_TipoComprobante FOREIGN KEY (tipoComprobanteId) REFERENCES dbo.TipoComprobante(id),
-    CONSTRAINT FK_Ventas_Usuarios FOREIGN KEY (usuarioId) REFERENCES dbo.Usuarios(id)
+    periodoId INT NOT NULL,
+    entrenadorId INT NOT NULL,
+    CONSTRAINT FK_Planes_Clientes
+        FOREIGN KEY (clienteId) REFERENCES dbo.Clientes(id),
+    CONSTRAINT FK_Planes_Periodos
+        FOREIGN KEY (periodoId) REFERENCES dbo.Periodos(id),
+    CONSTRAINT FK_Planes_Entrenadores
+        FOREIGN KEY (entrenadorId) REFERENCES dbo.Entrenadores(id)
 );
-GO
 
--- Detalles
-
-
-CREATE TABLE dbo.DetalleCompras (
+CREATE TABLE dbo.DetallePlanes (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    compraId INT NOT NULL,
-    cantidad DECIMAL(18,3) NOT NULL,
-    insumoId INT NOT NULL,
-    precioUnitario DECIMAL(18,2) NOT NULL,
-    usuarioId INT NOT NULL,
-    CONSTRAINT FK_DetalleCompras_Compras FOREIGN KEY (compraId) REFERENCES dbo.Compras(id),
-    CONSTRAINT FK_DetalleCompras_Insumos FOREIGN KEY (insumoId) REFERENCES dbo.Insumos(id),
-    CONSTRAINT FK_DetalleCompras_Usuarios FOREIGN KEY (usuarioId) REFERENCES dbo.Usuarios(id)
+    planId INT NOT NULL,
+    ejercicioId INT NOT NULL,
+    CONSTRAINT FK_DetallePlanes_Planes
+        FOREIGN KEY (planId) REFERENCES dbo.Planes(id),
+    CONSTRAINT FK_DetallePlanes_Ejercicios
+        FOREIGN KEY (ejercicioId) REFERENCES dbo.Ejercicios(id)
 );
-GO
 
-CREATE TABLE dbo.DetalleVentas (
+CREATE TABLE dbo.ActividadesClientes (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    ventaId INT NOT NULL,
-    cantidad DECIMAL(18,3) NOT NULL,
-    productoId INT NOT NULL,
-    precioUnitario DECIMAL(18,2) NOT NULL,
-    usuarioId INT NOT NULL,
-    CONSTRAINT FK_DetalleVentas_Ventas FOREIGN KEY (ventaId) REFERENCES dbo.Ventas(id),
-    CONSTRAINT FK_DetalleVentas_Productos FOREIGN KEY (productoId) REFERENCES dbo.Productos(id),
-    CONSTRAINT FK_DetalleVentas_Usuarios FOREIGN KEY (usuarioId) REFERENCES dbo.Usuarios(id)
+    actividadId INT NOT NULL,
+    clienteId INT NOT NULL,
+    fechaInicio DATETIME2(0) NOT NULL,
+    vigente INT NOT NULL, -- 1-Vigente | 2-Caducado
+    CONSTRAINT FK_ActCli_Actividades
+        FOREIGN KEY (actividadId) REFERENCES dbo.Actividades(id),
+    CONSTRAINT FK_ActCli_Clientes
+        FOREIGN KEY (clienteId) REFERENCES dbo.Clientes(id)
 );
-GO
 
--- Producción y consumos
-
-
-CREATE TABLE dbo.ProduccionProductos (
+CREATE TABLE dbo.ActividadesEntrenadores (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    fecha DATETIME2(0) NOT NULL,
-    productoId INT NOT NULL,
-    cantidad DECIMAL(18,3) NOT NULL,
-    CONSTRAINT FK_ProduccionProductos_Productos FOREIGN KEY (productoId) REFERENCES dbo.Productos(id)
+    actividadId INT NOT NULL,
+    entrenadorId INT NOT NULL,
+    fechaInicio DATETIME2(0) NOT NULL,
+    vigente INT NOT NULL, -- 1-Vigente | 2-Caducado
+    CONSTRAINT FK_ActEnt_Actividades
+        FOREIGN KEY (actividadId) REFERENCES dbo.Actividades(id),
+    CONSTRAINT FK_ActEnt_Entrenadores
+        FOREIGN KEY (entrenadorId) REFERENCES dbo.Entrenadores(id)
 );
-GO
 
-CREATE TABLE dbo.ConsumosInsumos (
-    id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    fecha DATETIME2(0) NOT NULL,
-    cantidad DECIMAL(18,3) NOT NULL,
-    insumoId INT NOT NULL,
-    CONSTRAINT FK_ConsumosInsumos_Insumos FOREIGN KEY (insumoId) REFERENCES dbo.Insumos(id)
-);
-GO
+-- Nota: en el modelo la propiedad se llama "entrengador" (con 'g'). Se respeta en el nombre de columna.
 
-CREATE TABLE dbo.ConsumoProduccion (
+
+CREATE TABLE dbo.EspecializacionesEntrenadores (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    consumoInsumoId INT NOT NULL,
-    produccionProductoId INT NOT NULL,
-    observaciones NVARCHAR(MAX) NULL,
-    CONSTRAINT FK_ConsumoProduccion_ConsumosInsumos FOREIGN KEY (consumoInsumoId) REFERENCES dbo.ConsumosInsumos(id),
-    CONSTRAINT FK_ConsumoProduccion_ProduccionProductos FOREIGN KEY (produccionProductoId) REFERENCES dbo.ProduccionProductos(id)
+    entrengadorId INT NOT NULL,
+    especializacionId INT NOT NULL,
+    CONSTRAINT FK_EspEnt_Entrenadores
+        FOREIGN KEY (entrengadorId) REFERENCES dbo.Entrenadores(id),
+    CONSTRAINT FK_EspEnt_Especializaciones
+        FOREIGN KEY (especializacionId) REFERENCES dbo.Especializaciones(id)
 );
-GO
+
+CREATE TABLE dbo.PagosClientes (
+    id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    fechaPago DATETIME2(0) NOT NULL,
+    clienteId INT NOT NULL,
+    planClienteId INT NOT NULL,
+    descripcion VARCHAR(200) NULL,
+    periodoId INT NOT NULL,
+    CONSTRAINT FK_Pagos_Clientes
+        FOREIGN KEY (clienteId) REFERENCES dbo.Clientes(id),
+    CONSTRAINT FK_Pagos_ActClientes
+        FOREIGN KEY (planClienteId) REFERENCES dbo.ActividadesClientes(id),
+    CONSTRAINT FK_Pagos_Periodos
+        FOREIGN KEY (periodoId) REFERENCES dbo.Periodos(id)
+);
