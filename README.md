@@ -20,11 +20,13 @@ CREATE TABLE dbo.Clientes (
 );
 GO
 
+
 CREATE TABLE dbo.TipoComprobante (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     descripcion NVARCHAR(200) NULL
 );
 GO
+
 
 CREATE TABLE dbo.Usuarios (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -36,6 +38,7 @@ CREATE TABLE dbo.Usuarios (
     fechaAlta DATETIME2(0) NOT NULL
 );
 GO
+
 
 CREATE TABLE dbo.Proveedores (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -57,6 +60,8 @@ CREATE TABLE dbo.Insumos (
 GO
 
 -- Movimientos principales
+
+
 CREATE TABLE dbo.Compras (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     fecha DATETIME2(0) NOT NULL,
@@ -94,6 +99,8 @@ CREATE TABLE dbo.Ventas (
 GO
 
 -- Detalles
+
+
 CREATE TABLE dbo.DetalleCompras (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     compraId INT NOT NULL,
@@ -121,6 +128,8 @@ CREATE TABLE dbo.DetalleVentas (
 GO
 
 -- Producción y consumos
+
+
 CREATE TABLE dbo.ProduccionProductos (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     fecha DATETIME2(0) NOT NULL,
