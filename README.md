@@ -13,6 +13,7 @@ Siempre que esten desarrollando asegurense tener su rama seleccionada. Cualquier
 //Tablas
 
 -- Base
+
 CREATE TABLE dbo.Clientes (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     nombreCompleto NVARCHAR(200) NULL,
