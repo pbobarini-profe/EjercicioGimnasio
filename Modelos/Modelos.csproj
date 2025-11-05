@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ActividadesEntrenadores.cs" />
     <Compile Include="DetallePlanes.cs" />
+    <Compile Include="DtoInformePagos.cs" />
     <Compile Include="Ejercicios.cs" />
     <Compile Include="Entrenadores.cs" />
     <Compile Include="Especializaciones.cs" />
