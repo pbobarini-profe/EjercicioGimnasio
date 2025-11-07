@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EjercicioClinica
+// ANTES DECÍA: namespace EjercicioClinica
+namespace Presentacion
 {
     static class Program
     {
@@ -16,6 +17,8 @@ namespace EjercicioClinica
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // Esta línea ya no dará error
             Application.Run(new Menu());
         }
     }

@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Modelos
 {
+   
     public class ActividadesClientes
     {
-        public int id { get; set; }
-        public Actividades actividad { get; set; }
-        public Clientes cliente { get; set; }
-        public DateTime fechaInicio { get; set; }
-        public int vigente { get; set; } // 1-Vigente | 2-Caducado
+        public int Id { get; set; }
+        public Actividades Actividad { get; set; }
+        public Clientes Cliente { get; set; }
+        public DateTime FechaInicio { get; set; }
+        public int Vigente { get; set; }
     }
 }

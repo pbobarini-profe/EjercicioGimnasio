@@ -10,16 +10,17 @@ using System.Windows.Forms;
 
 namespace EjercicioGimnasio
 {
-    public partial class PFormBase : Form
+    public partial class FrmReporteClientes : Form
     {
-        public PFormBase()
+        public FrmReporteClientes()
         {
             InitializeComponent();
         }
 
-        private void PFormBase_Load(object sender, EventArgs e)
+        private void FrmReporteClientes_Load(object sender, EventArgs e)
         {
 
+            this.reportViewer1.RefreshReport();
         }
     }
 }
